@@ -1,6 +1,7 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
-class Gwiazda{
+class Gwiazda extends ArrayList{
     String nazwa;
     String nazwaKatalogowa;
     String deklinacja;
@@ -12,7 +13,7 @@ class Gwiazda{
     String polkola;
     double temperatura;
     double masa;
-    HashMap<String, Integer> liczKonstelacja = new HashMap<>();
+    static HashMap<String, Integer> liczKonstelacja = new HashMap<>();
 
     public Gwiazda(String nazwa,  String deklinacja, String rektascencja, double obsWielkoscGwiazdowa,
                     double odleglosc, String gwiazdozbior, String polkola, double temperatura, double masa){
@@ -61,15 +62,48 @@ class Gwiazda{
         }
         return nazwaKatalogowa;
     }
+
+    public static void zmienNazwy(Gwiazda gwiazda, GwiazdaArrayList dozmiany){
+        liczKonstelacja.remove(gwiazda.gwiazdozbior);
+        for(Gwiazda g : dozmiany){
+            g.nazwaKatalogowa = g.genNazwaKatalogowa(g.gwiazdozbior);
+        }
+    }
+
+}
+
+class GwiazdaArrayList extends ArrayList<Gwiazda> {
+    @Override
+    public boolean remove(Object o) {
+        if (o instanceof Gwiazda) {
+            Gwiazda gwiazda = (Gwiazda) o;
+            super.remove(o);
+            Gwiazda.zmienNazwy(gwiazda, this);
+            return true;
+        } else {
+            return super.remove(o);
+        }
+    }
 }
 
 public class stars {
     public static void main(String[] args) {
+            GwiazdaArrayList gwiazdy = new GwiazdaArrayList();
             Gwiazda g = new Gwiazda(null, null, null, 0, 0, "W", null, 0, 0);
-            System.out.println(g.nazwaKatalogowa);
+            gwiazdy.add(g);
             Gwiazda g2 = new Gwiazda(null, null, null, 0, 0, "W", null, 0, 0);
-            System.out.println(g2.nazwaKatalogowa);
+            gwiazdy.add(g2);
             Gwiazda g3 = new Gwiazda(null, null, null, 0, 0, "W", null, 0, 0);
-            System.out.println(g3.nazwaKatalogowa);
+            gwiazdy.add(g3);
+
+            System.out.println(Gwiazda.liczKonstelacja.get(g.gwiazdozbior));
+            for(Gwiazda gw : gwiazdy){
+                System.out.println(gw.nazwaKatalogowa);
+            }
+            gwiazdy.remove(g2);
+            System.out.println(Gwiazda.liczKonstelacja.get(g.gwiazdozbior));
+            for(Gwiazda gw : gwiazdy){
+                System.out.println(gw.nazwaKatalogowa);
+            }
     }
 }
