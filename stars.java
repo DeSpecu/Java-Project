@@ -1,24 +1,127 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.Serializable;
 
-class Gwiazda extends ArrayList{
+class Gwiazda implements Serializable{
+
+    private static final long serialVersionUID = 1L;
+
     String nazwa;
+    public String getNazwa() {
+        return nazwa;
+    }
+
+    public void setNazwa(String nazwa) {
+        this.nazwa = nazwa;
+    }
+
     String nazwaKatalogowa;
+    public String getNazwaKatalogowa() {
+        return nazwaKatalogowa;
+    }
+
+    public void setNazwaKatalogowa(String nazwaKatalogowa) {
+        this.nazwaKatalogowa = nazwaKatalogowa;
+    }
+
     String deklinacja;
+    public String getDeklinacja() {
+        return deklinacja;
+    }
+
+    public void setDeklinacja(String deklinacja) {
+        this.deklinacja = deklinacja;
+    }
+
     String rektascencja;    
+    public String getRektascencja() {
+        return rektascencja;
+    }
+
+    public void setRektascencja(String rektascencja) {
+        this.rektascencja = rektascencja;
+    }
+
     double obsWielkoscGwiazdowa;
+    public double getObsWielkoscGwiazdowa() {
+        return obsWielkoscGwiazdowa;
+    }
+
+    public void setObsWielkoscGwiazdowa(double obsWielkoscGwiazdowa) {
+        this.obsWielkoscGwiazdowa = obsWielkoscGwiazdowa;
+    }
+
     double absWielkoscGwiazdowa;
+    public double getAbsWielkoscGwiazdowa() {
+        return absWielkoscGwiazdowa;
+    }
+
+    public void setAbsWielkoscGwiazdowa(double absWielkoscGwiazdowa) {
+        this.absWielkoscGwiazdowa = absWielkoscGwiazdowa;
+    }
+
     double odleglosc; 
+    public double getOdleglosc() {
+        return odleglosc;
+    }
+
+    public void setOdleglosc(double odleglosc) {
+        this.odleglosc = odleglosc;
+    }
+
     String gwiazdozbior;
+    public String getGwiazdozbior() {
+        return gwiazdozbior;
+    }
+
+    public void setGwiazdozbior(String gwiazdozbior) {
+        this.gwiazdozbior = gwiazdozbior;
+    }
+
     String polkola;
+    public String getPolkola() {
+        return polkola;
+    }
+
+    public void setPolkola(String polkola) {
+        this.polkola = polkola;
+    }
+
     double temperatura;
+    public double getTemperatura() {
+        return temperatura;
+    }
+
+    public void setTemperatura(double temperatura) {
+        this.temperatura = temperatura;
+    }
+
     double masa;
+    public double getMasa() {
+        return masa;
+    }
+
+    public void setMasa(double masa) {
+        this.masa = masa;
+    }
+
     static HashMap<String, Integer> liczKonstelacja = new HashMap<>();
+
+    public Gwiazda(){
+        };
 
     public Gwiazda(String nazwa,  String deklinacja, String rektascencja, double obsWielkoscGwiazdowa,
                     double odleglosc, String gwiazdozbior, String polkola, double temperatura, double masa){
 
-        double r = odleglosc * 3.26;
+        double r = odleglosc / 3.26;
 
         this.nazwa = nazwa;
         this.nazwaKatalogowa = genNazwaKatalogowa(gwiazdozbior);
@@ -103,8 +206,45 @@ class Gwiazda extends ArrayList{
         }
     }
 
-    public static void wyszukajWielkosc(){
-        
+    public static void wyszukajWielkosc(double wielkoscMin, double wielkoscMax, GwiazdaArrayList listaGwiazd, Boolean czyAbs){
+        double help;
+        if(wielkoscMin>wielkoscMax){
+            help = wielkoscMin;
+            wielkoscMin = wielkoscMax;
+            wielkoscMax = help;
+        }
+        double dlaAbsMin = wielkoscMin;
+        double dlaAbsMax = wielkoscMax;
+
+        for(Gwiazda g : listaGwiazd){
+            if(czyAbs){
+                wielkoscMin = dlaAbsMin - 5 * Math.log10(g.odleglosc/3.26) + 5;
+                wielkoscMax = dlaAbsMax - 5 * Math.log10(g.odleglosc/3.26) + 5;
+                System.out.println(wielkoscMin);
+                System.out.println(wielkoscMax);
+            }
+            if(g.obsWielkoscGwiazdowa>=wielkoscMin && g.obsWielkoscGwiazdowa<=wielkoscMax){
+                System.out.println(g.nazwa);
+            }
+        }
+    }
+
+    public static void wyszukajPolkola(String polkola, GwiazdaArrayList listaGwiazd){
+        if(polkola.equalsIgnoreCase("PN") || polkola.equalsIgnoreCase("PD")){
+            for(Gwiazda g : listaGwiazd){
+                if(g.polkola.equalsIgnoreCase(polkola)){
+                    System.out.println(g.nazwa);
+                }
+            }
+        }
+    }
+
+    public static void wyszukajSupernova(GwiazdaArrayList listGwiazd){
+        for(Gwiazda g : listGwiazd){
+            if(g.masa>1.44){
+                System.out.println(g.nazwa);
+            }
+        }
     }
 }
 
@@ -123,19 +263,33 @@ class GwiazdaArrayList extends ArrayList<Gwiazda> {
 }
 
 public class stars {
+    
+    public static void WriteObjectToFile(String sciezka ,Object serObj) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(sciezka);
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeUnshared(serObj);
+            objectOut.close();
+            fileOut.close();
+            System.out.println("The Object  was succesfully written to a file");
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     public static void main(String[] args) {
             GwiazdaArrayList gwiazdy = new GwiazdaArrayList();
-            Gwiazda g1 = new Gwiazda("Gwiazda 1", null, null, 0, 3.26, "W", null, 2004, 0);
+            Gwiazda g1 = new Gwiazda("Gwiazda 1", null, null, -30, 3.26, "W", "PD", 2004, 0.1);
             gwiazdy.add(g1);
-            Gwiazda g2 = new Gwiazda("Gwiazda 2", null, null, 0, 4, "W", null, 3120, 0);
+            Gwiazda g2 = new Gwiazda("Gwiazda 2", null, null, 12, 4, "W", "PN", 3120, 10);
             gwiazdy.add(g2);
-            Gwiazda g3 = new Gwiazda("Gwiazda 3", null, null, 0, 1, "W", null, 2145, 0);
+            Gwiazda g3 = new Gwiazda("Gwiazda 3", null, null, 1, 1, "W", "PN", 2145, 1.2);
             gwiazdy.add(g3);
-            Gwiazda g4 = new Gwiazda("Gwiazda 4", null, null, 0, 3.26, "Z", null, 9871, 0);
+            Gwiazda g4 = new Gwiazda("Gwiazda 4", null, null, 22, 3.26, "Z", "PD", 9871, 0.09);
             gwiazdy.add(g4);
-            Gwiazda g5 = new Gwiazda("Gwiazda 5", null, null, 0, 1.2, "Z", null, 4321, 0);
+            Gwiazda g5 = new Gwiazda("Gwiazda 5", null, null, 3.5, 1.2, "Z", "PD", 4321, 4.7);
             gwiazdy.add(g5);
-            Gwiazda g6 = new Gwiazda("Gwiazda 6", null, null, 0, 0.4, "Z", null, 1000, 0);
+            Gwiazda g6 = new Gwiazda("Gwiazda 6", null, null, 1.23, 32.6, "Z", "PN", 1000, 55);
             gwiazdy.add(g6);
             
             System.out.println(Gwiazda.liczKonstelacja.get(g1.gwiazdozbior));
@@ -152,5 +306,31 @@ public class stars {
             //Gwiazda.wyszukajGwiazdozbior("W", gwiazdy);
             //Gwiazda.wyszukajOdleglosc(1, gwiazdy);
             //Gwiazda.wyszukajTemperatura(3000, 2000, gwiazdy);
+            //Gwiazda.wyszukajWielkosc(1.23, -1.23, gwiazdy, true);
+            //Gwiazda.wyszukajPolkola("PD", gwiazdy);
+            //Gwiazda.wyszukajSupernova(gwiazdy);
+            for(Gwiazda g : gwiazdy){
+                WriteObjectToFile("C://Users//szymk//Desktop//java.txt", g2);
+            }
+            GwiazdaArrayList gwiazdyOdczyt = new GwiazdaArrayList();
+            
+            try {
+                FileInputStream fi = new FileInputStream(new File("C://Users//szymk//Desktop//java.txt"));
+                ObjectInputStream oi = new ObjectInputStream(fi);
+    
+                Gwiazda pr1 = (Gwiazda) oi.readObject();
+                oi.close();
+                fi.close();
+                System.out.println(pr1.nazwa);
+    
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found");
+            } catch (IOException e) {
+                System.out.println("Error initializing stream");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+    
+
     }
 }
