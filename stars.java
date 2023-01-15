@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.io.Serializable;
 
 class Gwiazda implements Serializable{
 
@@ -115,9 +114,6 @@ class Gwiazda implements Serializable{
 
     static HashMap<String, Integer> liczKonstelacja = new HashMap<>();
 
-    public Gwiazda(){
-        };
-
     public Gwiazda(String nazwa,  String deklinacja, String rektascencja, double obsWielkoscGwiazdowa,
                     double odleglosc, String gwiazdozbior, String polkola, double temperatura, double masa){
 
@@ -152,7 +148,7 @@ class Gwiazda implements Serializable{
     }
 
     private String genNazwaKatalogowa(String gwiazdozbior) {
-        String nazwaKatalogowa = "";
+        String nazwaKatalogowa;
         String[] alfabetGrecki = {"alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta", 
         "iota", "kappa", "lambda", "mu", "nu", "xi", "omicron", "pi", "rho", "sigma", "tau", "upsilon", "phi", "chi", "psi", "omega"};
         if(liczKonstelacja.containsKey(gwiazdozbior)) {
@@ -264,18 +260,35 @@ class GwiazdaArrayList extends ArrayList<Gwiazda> {
 
 public class stars {
     
-    public static void WriteObjectToFile(String sciezka ,Object serObj) {
+    public static void zapis(String sciezka , GwiazdaArrayList doZapisu) {
         try {
-            FileOutputStream fileOut = new FileOutputStream(sciezka);
-            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeUnshared(serObj);
-            objectOut.close();
-            fileOut.close();
-            System.out.println("The Object  was succesfully written to a file");
-            
+            FileOutputStream fo = new FileOutputStream(sciezka);
+            ObjectOutputStream oo = new ObjectOutputStream(fo);
+            oo.writeUnshared(doZapisu);
+            oo.close();
+            fo.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public static GwiazdaArrayList odczyt(String sciezka){
+        GwiazdaArrayList output = new GwiazdaArrayList();
+        try {
+            FileInputStream fi = new FileInputStream(new File(sciezka));
+            ObjectInputStream oi = new ObjectInputStream(fi);
+            output = (GwiazdaArrayList) oi.readObject();
+
+            oi.close();
+            fi.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found");
+        } catch (IOException e) {
+            System.out.println("Error initializing stream");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return output;
     }
     public static void main(String[] args) {
             GwiazdaArrayList gwiazdy = new GwiazdaArrayList();
@@ -296,8 +309,7 @@ public class stars {
             for(Gwiazda gw : gwiazdy){
                 System.out.println(gw.nazwaKatalogowa);
             }
-            // gwiazdy.remove(g2);
-            // gwiazdy.remove(g1);
+            gwiazdy.remove(g1);
             System.out.println(Gwiazda.liczKonstelacja.get(g1.gwiazdozbior));
             for(Gwiazda gw : gwiazdy){
                 System.out.println(gw.nazwaKatalogowa);
@@ -309,28 +321,10 @@ public class stars {
             //Gwiazda.wyszukajWielkosc(1.23, -1.23, gwiazdy, true);
             //Gwiazda.wyszukajPolkola("PD", gwiazdy);
             //Gwiazda.wyszukajSupernova(gwiazdy);
-            for(Gwiazda g : gwiazdy){
-                WriteObjectToFile("C://Users//szymk//Desktop//java.txt", g2);
+            zapis("C://Users//szymk//Desktop//java.txt", gwiazdy);  
+            GwiazdaArrayList poOdczyt = odczyt("C://Users//szymk//Desktop//java.txt");
+            for(Gwiazda g : poOdczyt){
+                System.out.println(g.nazwa);
             }
-            GwiazdaArrayList gwiazdyOdczyt = new GwiazdaArrayList();
-            
-            try {
-                FileInputStream fi = new FileInputStream(new File("C://Users//szymk//Desktop//java.txt"));
-                ObjectInputStream oi = new ObjectInputStream(fi);
-    
-                Gwiazda pr1 = (Gwiazda) oi.readObject();
-                oi.close();
-                fi.close();
-                System.out.println(pr1.nazwa);
-    
-            } catch (FileNotFoundException e) {
-                System.out.println("File not found");
-            } catch (IOException e) {
-                System.out.println("Error initializing stream");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-    
-
     }
 }
