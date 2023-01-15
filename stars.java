@@ -10,19 +10,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 class Gwiazda implements Serializable{
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     String nazwa;
+    String nazwaKatalogowa;
+    String deklinacja;
+    String rektascencja;    
+    double obsWielkoscGwiazdowa;
+    double absWielkoscGwiazdowa;
+    double odleglosc; 
+    String gwiazdozbior;
+    String polkola;
+    double temperatura;
+    double masa;
+    
     public String getNazwa() {
         return nazwa;
     }
-
+    
     public void setNazwa(String nazwa) {
         this.nazwa = nazwa;
     }
-
-    String nazwaKatalogowa;
+    
     public String getNazwaKatalogowa() {
         return nazwaKatalogowa;
     }
@@ -31,7 +41,6 @@ class Gwiazda implements Serializable{
         this.nazwaKatalogowa = nazwaKatalogowa;
     }
 
-    String deklinacja;
     public String getDeklinacja() {
         return deklinacja;
     }
@@ -39,8 +48,7 @@ class Gwiazda implements Serializable{
     public void setDeklinacja(String deklinacja) {
         this.deklinacja = deklinacja;
     }
-
-    String rektascencja;    
+    
     public String getRektascencja() {
         return rektascencja;
     }
@@ -48,35 +56,31 @@ class Gwiazda implements Serializable{
     public void setRektascencja(String rektascencja) {
         this.rektascencja = rektascencja;
     }
-
-    double obsWielkoscGwiazdowa;
+    
     public double getObsWielkoscGwiazdowa() {
         return obsWielkoscGwiazdowa;
     }
-
+    
     public void setObsWielkoscGwiazdowa(double obsWielkoscGwiazdowa) {
         this.obsWielkoscGwiazdowa = obsWielkoscGwiazdowa;
     }
-
-    double absWielkoscGwiazdowa;
+    
     public double getAbsWielkoscGwiazdowa() {
         return absWielkoscGwiazdowa;
     }
-
+    
     public void setAbsWielkoscGwiazdowa(double absWielkoscGwiazdowa) {
         this.absWielkoscGwiazdowa = absWielkoscGwiazdowa;
     }
-
-    double odleglosc; 
+    
     public double getOdleglosc() {
         return odleglosc;
     }
-
+    
     public void setOdleglosc(double odleglosc) {
         this.odleglosc = odleglosc;
     }
-
-    String gwiazdozbior;
+    
     public String getGwiazdozbior() {
         return gwiazdozbior;
     }
@@ -85,7 +89,6 @@ class Gwiazda implements Serializable{
         this.gwiazdozbior = gwiazdozbior;
     }
 
-    String polkola;
     public String getPolkola() {
         return polkola;
     }
@@ -94,7 +97,6 @@ class Gwiazda implements Serializable{
         this.polkola = polkola;
     }
 
-    double temperatura;
     public double getTemperatura() {
         return temperatura;
     }
@@ -103,7 +105,6 @@ class Gwiazda implements Serializable{
         this.temperatura = temperatura;
     }
 
-    double masa;
     public double getMasa() {
         return masa;
     }
