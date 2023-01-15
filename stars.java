@@ -66,10 +66,46 @@ class Gwiazda extends ArrayList{
     public static void zmienNazwy(Gwiazda gwiazda, GwiazdaArrayList dozmiany){
         liczKonstelacja.remove(gwiazda.gwiazdozbior);
         for(Gwiazda g : dozmiany){
-            g.nazwaKatalogowa = g.genNazwaKatalogowa(g.gwiazdozbior);
+            if(gwiazda.gwiazdozbior.equals(g.gwiazdozbior))
+                g.nazwaKatalogowa = g.genNazwaKatalogowa(g.gwiazdozbior);
         }
     }
 
+    public static  void wyszukajGwiazdozbior(String gzbior, GwiazdaArrayList listaGwiazd){
+        for(Gwiazda g : listaGwiazd){
+            if(gzbior.equals(g.gwiazdozbior)){
+                System.out.println(g.nazwa);
+            }
+        }
+    }
+
+    public static void wyszukajOdleglosc(double parseki, GwiazdaArrayList listaGwiazd){
+        double lataSwietlne = parseki * 3.26;
+        for(Gwiazda g : listaGwiazd){
+            if(g.odleglosc == lataSwietlne){
+                System.out.println(g.nazwa);
+            }
+        }
+    }
+
+    public static void wyszukajTemperatura(double tempMin, double tempMax, GwiazdaArrayList listaGwiazd){
+        double help;
+        if(tempMin>tempMax){
+            help = tempMin;
+            tempMin = tempMax;
+            tempMax = help;
+        }
+            
+        for(Gwiazda g : listaGwiazd){
+            if(g.temperatura>=tempMin && g.temperatura <= tempMax){
+                System.out.println(g.nazwa);
+            }
+        }
+    }
+
+    public static void wyszukajWielkosc(){
+        
+    }
 }
 
 class GwiazdaArrayList extends ArrayList<Gwiazda> {
@@ -89,21 +125,32 @@ class GwiazdaArrayList extends ArrayList<Gwiazda> {
 public class stars {
     public static void main(String[] args) {
             GwiazdaArrayList gwiazdy = new GwiazdaArrayList();
-            Gwiazda g = new Gwiazda(null, null, null, 0, 0, "W", null, 0, 0);
-            gwiazdy.add(g);
-            Gwiazda g2 = new Gwiazda(null, null, null, 0, 0, "W", null, 0, 0);
+            Gwiazda g1 = new Gwiazda("Gwiazda 1", null, null, 0, 3.26, "W", null, 2004, 0);
+            gwiazdy.add(g1);
+            Gwiazda g2 = new Gwiazda("Gwiazda 2", null, null, 0, 4, "W", null, 3120, 0);
             gwiazdy.add(g2);
-            Gwiazda g3 = new Gwiazda(null, null, null, 0, 0, "W", null, 0, 0);
+            Gwiazda g3 = new Gwiazda("Gwiazda 3", null, null, 0, 1, "W", null, 2145, 0);
             gwiazdy.add(g3);
+            Gwiazda g4 = new Gwiazda("Gwiazda 4", null, null, 0, 3.26, "Z", null, 9871, 0);
+            gwiazdy.add(g4);
+            Gwiazda g5 = new Gwiazda("Gwiazda 5", null, null, 0, 1.2, "Z", null, 4321, 0);
+            gwiazdy.add(g5);
+            Gwiazda g6 = new Gwiazda("Gwiazda 6", null, null, 0, 0.4, "Z", null, 1000, 0);
+            gwiazdy.add(g6);
+            
+            System.out.println(Gwiazda.liczKonstelacja.get(g1.gwiazdozbior));
+            for(Gwiazda gw : gwiazdy){
+                System.out.println(gw.nazwaKatalogowa);
+            }
+            // gwiazdy.remove(g2);
+            // gwiazdy.remove(g1);
+            System.out.println(Gwiazda.liczKonstelacja.get(g1.gwiazdozbior));
+            for(Gwiazda gw : gwiazdy){
+                System.out.println(gw.nazwaKatalogowa);
+            }
 
-            System.out.println(Gwiazda.liczKonstelacja.get(g.gwiazdozbior));
-            for(Gwiazda gw : gwiazdy){
-                System.out.println(gw.nazwaKatalogowa);
-            }
-            gwiazdy.remove(g2);
-            System.out.println(Gwiazda.liczKonstelacja.get(g.gwiazdozbior));
-            for(Gwiazda gw : gwiazdy){
-                System.out.println(gw.nazwaKatalogowa);
-            }
+            //Gwiazda.wyszukajGwiazdozbior("W", gwiazdy);
+            //Gwiazda.wyszukajOdleglosc(1, gwiazdy);
+            //Gwiazda.wyszukajTemperatura(3000, 2000, gwiazdy);
     }
 }
